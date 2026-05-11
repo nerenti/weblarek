@@ -8,6 +8,9 @@ export interface IApi {
 // Тип для способа оплаты
 export type TPayment = 'card' | 'cash';
 
+// Тип для ошибок валидации
+export type ValidationErrors = Partial<Record<keyof IBuyer, string>>;
+
 // Интерфейс товара
 export interface IProduct {
   id: string;          // уникальный идентификатор товара
@@ -20,7 +23,7 @@ export interface IProduct {
 
 // Интерфейс покупателя
 export interface IBuyer {
-  payment: TPayment;   // способ оплаты
+  payment: TPayment | null;   // способ оплаты
   email: string;       // электронная почта
   phone: string;       // номер телефона
   address: string;     // адрес доставки
@@ -33,13 +36,11 @@ export interface IProductsResponse {
 }
 
 // Данные заказа, отправляемые на сервер (POST /order)
-export interface IOrder {
-  payment: TPayment;
-  email: string;
-  phone: string;
-  address: string;
-  items: string[];      // массив id товаров
-}
+export interface IOrder extends IBuyer{
+    total: number; 
+    items: string[]; // массив id товаров
+}       
+
 
 // Ответ сервера после оформления заказа (POST /order)
 export interface IOrderResult {

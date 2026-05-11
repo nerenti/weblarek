@@ -1,5 +1,5 @@
 import { IApi } from '../../types/index';
-import { IProduct, IProductsResponse, IOrder, IOrderResult } from '../../types/index';
+import { IProductsResponse, IOrder, IOrderResult } from '../../types/index';
 
 /**
  * Класс для коммуникации с сервером «Веб-ларёк»
@@ -11,11 +11,10 @@ export class AppApi {
   /**
    * Получить список всех товаров с сервера
    * GET /product/
-   * @returns Promise с массивом товаров
+   *  @returns Promise с полным объектом ответа сервера (IProductsResponse)
    */
-  async getProducts(): Promise<IProduct[]> {
-    const response = await this.baseApi.get<IProductsResponse>('/product/');
-    return response.items;
+  async getProducts(): Promise<IProductsResponse> {
+    return this.baseApi.get<IProductsResponse>('/product/');
   }
 
   /**

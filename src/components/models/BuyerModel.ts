@@ -1,4 +1,4 @@
-import { IBuyer, TPayment } from '../../../types/index';
+import { IBuyer, TPayment, ValidationErrors } from '../../types/index';
 
 /**
  * Модель данных покупателя
@@ -36,7 +36,7 @@ export class BuyerModel {
    */
   getData(): IBuyer {
     return {
-      payment: this.payment ?? 'card',     
+      payment: this.payment,     
       email: this.email,
       phone: this.phone,
       address: this.address,
@@ -64,8 +64,8 @@ export class BuyerModel {
    * // Возвращает { payment: 'Не выбран вид оплаты', email: 'Укажите email' }
    * // если payment === null и email === ''
    */
-  validate(): Partial<Record<keyof IBuyer, string>> {
-    const errors: Partial<Record<keyof IBuyer, string>> = {};
+  validate(): ValidationErrors {
+    const errors: ValidationErrors = {};
 
     if (this.payment === null) {
       errors.payment = 'Не выбран вид оплаты';

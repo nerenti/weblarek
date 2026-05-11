@@ -1,9 +1,9 @@
 import './scss/styles.scss';
 import { apiProducts } from './utils/data';
-import { CatalogModel } from './components/base/models/CatalogModel';
-import { CartModel } from './components/base/models/CartModel';
-import { BuyerModel } from './components/base/models/BuyerModel';
-import { AppApi } from './components/base/AppApi';
+import { CatalogModel } from './components/models/CatalogModel';
+import { CartModel } from './components/models/CartModel';
+import { BuyerModel } from './components/models/BuyerModel';
+import { AppApi } from './components/communications/AppApi';
 import { Api } from './components/base/Api';
 import { API_URL } from './utils/constants';
 
@@ -54,6 +54,7 @@ console.log('\n========== ТЕСТ: BuyerModel ==========');
 
 const buyerModel = new BuyerModel();
 
+//Тест с валидными данными
 buyerModel.setData({ email: 'test@example.com', phone: '+123456789' });
 buyerModel.setData({ address: 'ул. Тестовая, д.1' });
 buyerModel.setData({ payment: 'card' });
@@ -63,25 +64,28 @@ console.log('✅ Валидация:', buyerModel.validate());
 buyerModel.clear();
 console.log('🧹 После очистки:', buyerModel.getData());
 
+//Тест с невалидными данными
+console.log('❌ Валидация', buyerModel.validate());
+
+
 // ==================== 2. ЗАПРОС К СЕРВЕРУ ====================
 console.log('\n========== ЗАПРОС К СЕРВЕРУ ==========');
 
-// Проверяем, что URL загрузился
 console.log(`🌐 Адрес сервера: ${API_URL}`);
 
-// Создаём экземпляр базового Api с URL из constants.ts
 const baseApi = new Api(API_URL);
-
-// Создаём экземпляр AppApi
 const appApi = new AppApi(baseApi);
 
 // Выполняем запрос на сервер для получения товаров
 appApi.getProducts()
-  .then(products => {
-    console.log('✅ Товары успешно получены с сервера:');
-    console.log(products);
+  .then(response => {
+    console.log('✅ Ответ сервера (полный объект):', response);
     
-    // Сохраняем полученные товары в модель каталога (заменяем тестовые данные)
+    // Извлекаем массив товаров из ответа
+    const products = response.items;
+    console.log('📦 Массив товаров, извлечённый из ответа:', products);
+    
+    // Сохраняем полученные товары в модель каталога
     catalogModel.setProducts(products);
     
     console.log('\n📦 Каталог после сохранения данных с сервера:');

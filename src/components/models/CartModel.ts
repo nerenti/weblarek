@@ -1,4 +1,4 @@
-import { IProduct } from '../../../types/index';
+import { IProduct } from '../../types/index';
 
 /**
  * Модель корзины покупателя
@@ -13,7 +13,7 @@ export class CartModel {
    * @returns копия массива товаров в корзине
    */
   getItems(): IProduct[] {
-    return [...this.items];
+    return this.items;
   }
 
   /**
@@ -22,12 +22,11 @@ export class CartModel {
    * @param product - товар для добавления
    */
   addItem(product: IProduct): void {
-    // Проверяем, есть ли уже такой товар в корзине
-    const exists = this.items.some(item => item.id === product.id);
-    if (!exists) {
-      this.items.push(product);
-    }
+  // Проверяем есть ли такой товар в корзине
+  if (!this.contains(product.id)) {
+    this.items.push(product);
   }
+}
 
   /**
    * Удаляет товар из корзины по его идентификатору

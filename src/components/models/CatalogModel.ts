@@ -1,4 +1,4 @@
-import { IProduct } from '../../../types/index';
+import { IProduct } from '../../types/index';
 
 /**
  * Модель каталога товаров
@@ -24,7 +24,7 @@ export class CatalogModel {
    * @returns копия массива товаров
    */
   getProducts(): IProduct[] {
-    return [...this.products];
+    return this.products;
   }
 
   /**

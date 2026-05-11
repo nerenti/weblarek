@@ -1,4 +1,4 @@
-import { IBuyer, TPayment } from '../../../types/index.ts';
+import { IBuyer, TPayment } from '../../../types/index';
 
 /**
  * Модель данных покупателя

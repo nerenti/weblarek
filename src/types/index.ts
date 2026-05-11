@@ -25,3 +25,24 @@ export interface IBuyer {
   phone: string;       // номер телефона
   address: string;     // адрес доставки
 }
+
+// Ответ сервера при получении списка товаров (GET /product/)
+export interface IProductsResponse {
+  total: number;
+  items: IProduct[];
+}
+
+// Данные заказа, отправляемые на сервер (POST /order)
+export interface IOrder {
+  payment: TPayment;
+  email: string;
+  phone: string;
+  address: string;
+  items: string[];      // массив id товаров
+}
+
+// Ответ сервера после оформления заказа (POST /order)
+export interface IOrderResult {
+  id: string;           // идентификатор заказа
+  total: number;        // общая стоимость
+}

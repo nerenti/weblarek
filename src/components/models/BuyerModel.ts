@@ -79,7 +79,7 @@ export class BuyerModel {
       errors.phone = 'Укажите телефон';
     }
 
-    if (this.address.trim() === '') {
+    if (!this.address.trim()) {
       errors.address = 'Укажите адрес доставки';
     }
 

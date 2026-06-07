@@ -80,7 +80,7 @@ export class BuyerModel {
     }
 
     if (!this.address.trim()) {
-      errors.address = 'Укажите адрес доставки';
+      errors.address = 'Необходимо указать адрес';
     }
 
     return errors;

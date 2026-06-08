@@ -9,8 +9,8 @@ export class CardModal extends Card {
         
         this._description = container.querySelector('.card__text');
         
-        if (this._button) {
-            this._button.addEventListener('click', () => {
+        if (this.button) {
+            this.button.addEventListener('click', () => {
                 events.emit('preview:toggle');
             });
         }
@@ -18,9 +18,5 @@ export class CardModal extends Card {
 
     set description(value: string) {
         this.setText(this._description, value);
-    }
-
-    render(): HTMLElement {
-        return this.container;
     }
 }

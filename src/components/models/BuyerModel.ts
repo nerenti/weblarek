@@ -1,4 +1,5 @@
 import { IBuyer, TPayment, ValidationErrors } from '../../types/index';
+import { EventEmitter } from '../base/Events';
 
 /**
  * Модель данных покупателя
@@ -16,18 +17,23 @@ export class BuyerModel {
   
   // Адрес доставки
   private address: string = '';
+  
+  private events: EventEmitter;
+
+  constructor(events: EventEmitter) {
+    this.events = events;
+  }
 
   /**
    * Сохраняет данные покупателя (частично или полностью)
    * @param data - объект с любым набором полей IBuyer
-   * @example
-   * buyerModel.setData({ email: 'user@example.com' }); // обновит только email
    */
   setData(data: Partial<IBuyer>): void {
     if (data.payment !== undefined) this.payment = data.payment;
     if (data.email !== undefined) this.email = data.email;
     if (data.phone !== undefined) this.phone = data.phone;
     if (data.address !== undefined) this.address = data.address;
+    this.events.emit('buyer:changed');
   }
 
   /**
@@ -51,18 +57,11 @@ export class BuyerModel {
     this.email = '';
     this.phone = '';
     this.address = '';
+    this.events.emit('buyer:changed');
   }
 
   /**
    * Проверяет валидность каждого поля, сохранённого в модели
-   * Поле считается валидным, если оно не пустое:
-   * - строки не должны быть пустыми
-   * - payment не должен быть null
-   * @returns объект с ошибками: ключ = поле, значение = текст ошибки.
-   *          Если поле валидно, оно отсутствует в возвращаемом объекте.
-   * @example
-   * // Возвращает { payment: 'Не выбран вид оплаты', email: 'Укажите email' }
-   * // если payment === null и email === ''
    */
   validate(): ValidationErrors {
     const errors: ValidationErrors = {};

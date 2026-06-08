@@ -1,26 +1,19 @@
-import { Component } from '../base/Component';
+import { BaseCard } from './BaseCard';
+import { categoryMap } from '../../utils/constants';
 
-export class Card extends Component<object> {
-    protected _title: HTMLElement | null = null;
-    protected _price: HTMLElement | null = null;
+/**
+ * Карточка с кнопкой и категорией (для каталога и модального окна)
+ */
+export class Card extends BaseCard {
     protected _image: HTMLImageElement | null = null;
     protected _category: HTMLElement | null = null;
     protected _button: HTMLButtonElement | null = null;
 
     constructor(container: HTMLElement) {
         super(container);
-        
-        this._title = container.querySelector('.card__title');
-        this._price = container.querySelector('.card__price');
         this._image = container.querySelector('.card__image');
         this._category = container.querySelector('.card__category');
         this._button = container.querySelector('.card__button');
-    }
-
-    protected setText(element: HTMLElement | null, value: unknown) {
-        if (element) {
-            element.textContent = String(value);
-        }
     }
 
     protected setImage(element: HTMLImageElement | null, src: string, alt?: string) {
@@ -32,26 +25,6 @@ export class Card extends Component<object> {
         }
     }
 
-    set title(value: string) {
-        this.setText(this._title, value);
-    }
-
-    set price(value: number | null) {
-    if (value === null) {
-        this.setText(this._price, 'Недоступно');
-        if (this._button) {
-            this._button.disabled = true;
-            this._button.textContent = 'Недоступно';
-        }
-    } else {
-        this.setText(this._price, `${value} синапсов`);
-        if (this._button) {
-            this._button.disabled = false; 
-            
-        }
-    }
-}
-
     set image(value: string) {
         this.setImage(this._image, value);
     }
@@ -59,14 +32,27 @@ export class Card extends Component<object> {
     set category(value: string) {
         if (this._category) {
             this.setText(this._category, value);
-            const categoryMap: Record<string, string> = {
-                'софт-скил': 'card__category_soft',
-                'хард-скил': 'card__category_hard',
-                'кнопка': 'card__category_button',
-                'дополнительное': 'card__category_additional',
-                'другое': 'card__category_other',
-            };
-            this._category.className = `card__category ${categoryMap[value] || ''}`;
+            const categoryClass = categoryMap[value as keyof typeof categoryMap];
+            if (categoryClass) {
+                this._category.className = `card__category ${categoryClass}`;
+            }
+        }
+    }
+
+    // Переопределяем price, чтобы управлять кнопкой
+    set price(value: number | null) {
+        if (value === null) {
+            this.setText(this._price, 'Бесценно');
+            if (this._button) {
+                this._button.disabled = true;
+                this._button.textContent = 'Недоступно';
+            }
+        } else {
+            this.setText(this._price, `${value} синапсов`);
+            // Не сбрасываем buttonText здесь — это делает презентер
+            if (this._button) {
+                this._button.disabled = false;
+            }
         }
     }
 
@@ -82,7 +68,7 @@ export class Card extends Component<object> {
         }
     }
 
-    render(): HTMLElement {
-        return this.container;
+    get button(): HTMLButtonElement | null {
+        return this._button;
     }
 }

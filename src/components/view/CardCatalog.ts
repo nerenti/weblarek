@@ -5,8 +5,4 @@ export class CardCatalog extends Card {
         super(container);
         this.container.addEventListener('click', onClick);
     }
-
-    render(): HTMLElement {
-        return this.container;
-    }
 }

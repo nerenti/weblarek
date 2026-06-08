@@ -11,6 +11,7 @@ export class ContactsForm extends Form {
         this._email = container.querySelector('[name=email]');
         this._phone = container.querySelector('[name=phone]');
         
+        // Только эмитим события
         if (this._email) {
             this._email.addEventListener('input', () => {
                 events.emit('contacts:email', { email: this._email?.value || '' });
@@ -39,7 +40,6 @@ export class ContactsForm extends Form {
             this._phone.value = value;
         }
     }
-
 
     render(): HTMLElement {
         return this.container;

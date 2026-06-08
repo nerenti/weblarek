@@ -1,4 +1,5 @@
 import { IProduct } from '../../types/index';
+import { EventEmitter } from '../base/Events';
 
 /**
  * Модель корзины покупателя
@@ -7,6 +8,11 @@ import { IProduct } from '../../types/index';
 export class CartModel {
   // Массив товаров, добавленных в корзину
   private items: IProduct[] = [];
+  private events: EventEmitter;
+
+  constructor(events: EventEmitter) {
+    this.events = events;
+  }
 
   /**
    * Возвращает массив товаров, находящихся в корзине
@@ -22,11 +28,11 @@ export class CartModel {
    * @param product - товар для добавления
    */
   addItem(product: IProduct): void {
-  // Проверяем есть ли такой товар в корзине
-  if (!this.contains(product.id)) {
-    this.items.push(product);
+    if (!this.contains(product.id)) {
+      this.items.push(product);
+      this.events.emit('cart:changed');
+    }
   }
-}
 
   /**
    * Удаляет товар из корзины по его идентификатору
@@ -34,6 +40,7 @@ export class CartModel {
    */
   removeItem(productId: string): void {
     this.items = this.items.filter(item => item.id !== productId);
+    this.events.emit('cart:changed');
   }
 
   /**
@@ -41,6 +48,7 @@ export class CartModel {
    */
   clear(): void {
     this.items = [];
+    this.events.emit('cart:changed');
   }
 
   /**

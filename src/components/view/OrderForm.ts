@@ -14,16 +14,15 @@ export class OrderForm extends Form {
         this._cashButton = container.querySelector('button[name=cash]');
         this._address = container.querySelector('[name=address]');
         
+        // Только эмитим события, не меняем себя
         if (this._cardButton) {
             this._cardButton.addEventListener('click', () => {
                 events.emit('order:payment', { payment: 'card' });
-                this.setPaymentActive('card');
             });
         }
         if (this._cashButton) {
             this._cashButton.addEventListener('click', () => {
                 events.emit('order:payment', { payment: 'cash' });
-                this.setPaymentActive('cash');
             });
         }
         if (this._address) {
@@ -38,6 +37,9 @@ export class OrderForm extends Form {
         });
     }
 
+    /**
+     * Устанавливает активную кнопку оплаты (вызывается из презентера)
+     */
     setPaymentActive(value: TPayment) {
         if (value === 'card' && this._cardButton && this._cashButton) {
             this._cardButton.classList.add('button_alt-active');
@@ -54,7 +56,6 @@ export class OrderForm extends Form {
         }
     }
 
-    
     render(): HTMLElement {
         return this.container;
     }

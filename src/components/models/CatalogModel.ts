@@ -1,4 +1,5 @@
 import { IProduct } from '../../types/index';
+import { EventEmitter } from '../base/Events';
 
 /**
  * Модель каталога товаров
@@ -10,6 +11,12 @@ export class CatalogModel {
   
   // Товар, выбранный для подробного просмотра (или null, если ничего не выбрано)
   private selectedProduct: IProduct | null = null;
+  
+  private events: EventEmitter;
+
+  constructor(events: EventEmitter) {
+    this.events = events;
+  }
 
   /**
    * Сохраняет массив товаров (например, полученный с сервера)
@@ -17,6 +24,7 @@ export class CatalogModel {
    */
   setProducts(products: IProduct[]): void {
     this.products = products;
+    this.events.emit('catalog:changed');
   }
 
   /**
@@ -42,6 +50,7 @@ export class CatalogModel {
    */
   setSelectedProduct(product: IProduct): void {
     this.selectedProduct = product;
+    this.events.emit('selected-product:changed');
   }
 
   /**
